@@ -4,8 +4,19 @@ import { AddButton } from '../../components/AddButton'
 import { SearchInput } from '../../components/SearchInput'
 import { ContentContainer, ParceirosContainer } from './styles'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Partner } from '../NovoParceiro'
 
 export function Parceiros() {
+  const [partners, setPartners] = useState<Partner[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3000/partners')
+      .then((response) => response.json())
+      .then((data) => setPartners(data))
+      .catch((error) => console.error('Erro ao buscar parceiros:', error))
+  }, [])
+
   return (
     <ParceirosContainer>
       <header>
@@ -30,65 +41,26 @@ export function Parceiros() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>XXXXXX</td>
-              <td>
-                <div>
-                  <p>Username Name</p>
-                  <span>XXX.XXX.XXX-XX | Titular</span>
-                </div>
-              </td>
-              <td>(XX) X XXXX-XXXX</td>
-              <td>XXXXXX</td>
-              <td>Partner Name</td>
-              <td>
-                <div className="actions">
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>XXXXXX</td>
-              <td>
-                <div>
-                  <p>Username Name</p>
-                  <span>XXX.XXX.XXX-XX | Titular</span>
-                </div>
-              </td>
-              <td>(XX) X XXXX-XXXX</td>
-              <td>XXXXXX</td>
-              <td>Partner Name</td>
-              <td>
-                <div className="actions">
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td>XXXXXX</td>
-              <td>
-                <div>
-                  <p>Username Name</p>
-                  <span>XXX.XXX.XXX-XX | Titular</span>
-                </div>
-              </td>
-              <td>(XX) X XXXX-XXXX</td>
-              <td>XXXXXX</td>
-              <td>Partner Name</td>
-              <td>
-                <div className="actions">
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                  <CircleDashed size={12} />
-                </div>
-              </td>
-            </tr>
+            {partners.length === 0 ? (
+              <p>Não há parceiros cadastrados.</p>
+            ) : (
+              partners.map((partner) => (
+                <tr key={partner.id}>
+                  <td>{partner.category}</td>
+                  <td>{partner.name}</td>
+                  <td>{partner.phone}</td>
+                  <td>XXX</td>
+                  <td>XXX</td>
+                  <td>
+                    <div className="actions">
+                      <CircleDashed size={12} />
+                      <CircleDashed size={12} />
+                      <CircleDashed size={12} />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
 
           <tfoot>

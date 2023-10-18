@@ -9,7 +9,7 @@ import {
   ProgressTab,
 } from './styles'
 import { Input } from '../../components/Input'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { SearchInput } from '../../components/SearchInput'
 import { AddButton } from '../../components/AddButton'
 import { AddressFormModal } from './components/AddressFormModal'
@@ -34,60 +34,54 @@ export type Partner = {
   financialContact: string
   password: string
   confirmPassword: string
-  addresses: Address[]
+  addresses: number[]
 }
 
 export function NovoParceiro() {
   const [step, setStep] = useState(1)
-  const [partnerData, setPartnerData] = useState<Partner>(() => {
-    const storedData = localStorage.getItem('partnerData')
-    return storedData
-      ? JSON.parse(storedData)
-      : {
-          id: 0,
-          category: '',
-          cnpj: '',
-          name: '',
-          email: '',
-          phone: '',
-          mobile: '',
-          clinicalContact: '',
-          financialContact: '',
-          password: '',
-          confirmPassword: '',
-          addresses: [],
-        }
+  const [partnerData, setPartnerData] = useState<Partner>({
+    id: 0,
+    category: '',
+    cnpj: '',
+    name: '',
+    email: '',
+    phone: '',
+    mobile: '',
+    clinicalContact: '',
+    financialContact: '',
+    password: '',
+    confirmPassword: '',
+    addresses: [],
   })
 
-  function nextStep() {
-    setStep(step + 1)
-  }
+  async function handleStep1Submit(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault()
 
-  /*
-  const handleStep1Submit = () => {
-    nextStep()
-  }
-  */
+    try {
+      const response = await fetch('http://localhost:3000/partners', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(partnerData),
+      })
 
-  /*
-  const handleStep2Submit = (address: Address) => {
-    setPartnerData({
-      ...partnerData,
-      addresses: [...partnerData.addresses, address],
-    })
-    nextStep()
+      if (response.ok) {
+        const newPartner = await response.json()
+        setPartnerData(newPartner)
+        setStep(2)
+      } else {
+        console.error('Erro ao enviar dados do parceiro.')
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados do parceiro:', error)
+    }
   }
-  */
-
-  useEffect(() => {
-    localStorage.setItem('partnerData', JSON.stringify(partnerData))
-  }, [partnerData])
 
   return (
     <ParceirosContainer>
       <header>
-        {step > 1 && <CaretLeft size={19} />}
-
+        <CaretLeft size={19} />
         <h1>Novo Parceiro</h1>
       </header>
 
@@ -202,7 +196,7 @@ export function NovoParceiro() {
               <div></div>
               <div className="button-wrapper">
                 <button className="btn-cancel">Cancelar</button>
-                <button className="btn-next" onClick={nextStep}>
+                <button className="btn-next" onClick={handleStep1Submit}>
                   Próxima
                 </button>
               </div>
@@ -272,9 +266,7 @@ export function NovoParceiro() {
 
               <div className="button-wrapper">
                 <button className="btn-cancel">Cancelar</button>
-                <button className="btn-next" onClick={() => {}}>
-                  Finalizar
-                </button>
+                <button className="btn-next">Finalizar</button>
               </div>
             </>
           )}
