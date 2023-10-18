@@ -14,6 +14,7 @@ export const AddButtonContainer = styled.button<AddButtonContainerProps>`
   justify-content: center;
   gap: 0.8rem;
 
+  min-width: 20rem;
   height: 4rem;
   padding: 0 1.6rem;
 
