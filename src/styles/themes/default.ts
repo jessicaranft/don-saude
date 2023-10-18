@@ -10,4 +10,6 @@ export const defaultTheme = {
   'txt-tertiary': '#667085',
 
   'bt-bg': '#E6EEF4',
+  'shape-tertiary': '#D0D5DD',
+  'shape-secondary': '#EAECF0',
 }

@@ -12,7 +12,9 @@ export function DefaultLayout() {
 
       <ContentContainer>
         <Header />
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>
       </ContentContainer>
     </LayoutContainer>
   )

@@ -23,4 +23,15 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Inter', sans-serif;
     font-weight: 500;
   }
+
+  a {
+    text-decoration: none;
+  }
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    color: ${(props) => props.theme['txt-primary']};
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
 `
