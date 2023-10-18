@@ -38,7 +38,6 @@ export type Partner = {
   financialContact: string
   password: string
   confirmPassword: string
-  addresses: number[]
 }
 
 export function NovoParceiro() {
@@ -57,7 +56,6 @@ export function NovoParceiro() {
     financialContact: '',
     password: '',
     confirmPassword: '',
-    addresses: [],
   })
 
   // Navegação para a página de parceiros
@@ -69,7 +67,7 @@ export function NovoParceiro() {
 
   // Função assíncrona para inserir os dados no fake json-server
   // Falta lidar com tratamento de erros sobre os campos dos formulários
-  async function handleStep1Submit(e: React.FormEvent) {
+  async function handleStep1Submit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
 
     try {
@@ -121,7 +119,7 @@ export function NovoParceiro() {
 
         <FormContainer>
           {step === 1 && (
-            <form onSubmit={handleStep1Submit}>
+            <form>
               <Input
                 id="category"
                 labelTitle="Categoria"
@@ -220,7 +218,7 @@ export function NovoParceiro() {
                 <button className="btn-cancel" onClick={redirectToHome}>
                   Cancelar
                 </button>
-                <button className="btn-next" type="submit">
+                <button className="btn-next" onClick={handleStep1Submit}>
                   Próxima
                 </button>
               </div>

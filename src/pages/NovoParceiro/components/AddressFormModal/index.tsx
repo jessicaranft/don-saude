@@ -9,6 +9,7 @@ import { CloseButton, Content, Overlay } from './styles'
 
 export function AddressFormModal() {
   const [formData, setFormData] = useState({
+    id: 0,
     cep: '',
     street: '',
     number: '',
@@ -31,7 +32,7 @@ export function AddressFormModal() {
       })
 
       if (response.ok) {
-        console.log('Endereço salvo com sucesso.')
+        alert('Endereço salvo com sucesso.')
       } else {
         console.error('Erro ao enviar o novo endereço.')
       }
@@ -92,13 +93,14 @@ export function AddressFormModal() {
 
           <div className="button-wrapper">
             <Dialog.Close asChild>
-              <button className="btn-cancel">Cancelar</button>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <button className="btn-next" type="submit">
-                Finalizar
+              <button className="btn-cancel" type="button">
+                Cancelar
               </button>
             </Dialog.Close>
+
+            <button className="btn-next" type="submit">
+              Finalizar
+            </button>
           </div>
         </form>
       </Content>

@@ -3,17 +3,25 @@
     {
       "id": 1,
       "category": "Teste",
-      "cnpj": "",
+      "cnpj": "12345",
       "name": "Teste",
-      "email": "teste@teste.com",
-      "phone": "1234",
-      "mobile": "1234",
+      "email": "teste@gmail.com",
+      "phone": "12345",
+      "mobile": "12345",
       "clinicalContact": "Teste",
       "financialContact": "Teste",
       "password": "1234",
-      "confirmPassword": "1234",
-      "addresses": []
+      "confirmPassword": "1234"
     }
   ],
-  "addresses": []
+  "addresses": [
+    {
+      "id": 1,
+      "cep": "1234",
+      "street": "Teste",
+      "number": "12",
+      "neighborhood": "Teste",
+      "complement": "Teste"
+    }
+  ]
 }
