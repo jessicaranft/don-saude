@@ -1,4 +1,19 @@
 {
-  "partners": [],
+  "partners": [
+    {
+      "id": 1,
+      "category": "Teste",
+      "cnpj": "",
+      "name": "Teste",
+      "email": "teste@teste.com",
+      "phone": "1234",
+      "mobile": "1234",
+      "clinicalContact": "Teste",
+      "financialContact": "Teste",
+      "password": "1234",
+      "confirmPassword": "1234",
+      "addresses": []
+    }
+  ],
   "addresses": []
 }

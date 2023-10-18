@@ -1,15 +1,18 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import { CaretDown, CircleDashed, CaretLeft, CaretRight } from 'phosphor-react'
 
 import { AddButton } from '../../components/AddButton'
 import { SearchInput } from '../../components/SearchInput'
 import { ContentContainer, ParceirosContainer } from './styles'
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+
 import { Partner } from '../NovoParceiro'
 
 export function Parceiros() {
   const [partners, setPartners] = useState<Partner[]>([])
 
+  // Busca os dados de parceiros cadastrados no json-server
   useEffect(() => {
     fetch('http://localhost:3000/partners')
       .then((response) => response.json())
@@ -67,6 +70,7 @@ export function Parceiros() {
             <tr>
               <td colSpan={6}>
                 <div className="footer-wrapper">
+                  {/** O trecho abaixo é apenas para fins visuais neste momento */}
                   <div>
                     Mostrando
                     <span>

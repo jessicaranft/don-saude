@@ -1,20 +1,24 @@
-import { CaretLeft, CircleDashed } from 'phosphor-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { CaretLeft, CircleDashed, PlusCircle } from 'phosphor-react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
 import {
   ContentContainer,
   FormContainer,
+  NewAddressButton,
   ParceirosContainer,
   ProgressTab,
 } from './styles'
 import { Input } from '../../components/Input'
-import { useState } from 'react'
 import { SearchInput } from '../../components/SearchInput'
-import { AddButton } from '../../components/AddButton'
 import { AddressFormModal } from './components/AddressFormModal'
 
+// Declaração das tipagens para cadastro de parceiros e endereços
 export type Address = {
+  id: number
   cep: string
   street: string
   number: string
@@ -39,6 +43,8 @@ export type Partner = {
 
 export function NovoParceiro() {
   const [step, setStep] = useState(1)
+
+  const [addresses, setAddresses] = useState<Address[]>([])
   const [partnerData, setPartnerData] = useState<Partner>({
     id: 0,
     category: '',
@@ -54,8 +60,17 @@ export function NovoParceiro() {
     addresses: [],
   })
 
-  async function handleStep1Submit(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault()
+  // Navegação para a página de parceiros
+  const navigate = useNavigate()
+
+  function redirectToHome() {
+    navigate('/')
+  }
+
+  // Função assíncrona para inserir os dados no fake json-server
+  // Falta lidar com tratamento de erros sobre os campos dos formulários
+  async function handleStep1Submit(e: React.FormEvent) {
+    e.preventDefault()
 
     try {
       const response = await fetch('http://localhost:3000/partners', {
@@ -78,6 +93,13 @@ export function NovoParceiro() {
     }
   }
 
+  useEffect(() => {
+    fetch('http://localhost:3000/addresses')
+      .then((response) => response.json())
+      .then((data) => setAddresses(data))
+      .catch((error) => console.error('Erro ao buscar endereços:', error))
+  }, [])
+
   return (
     <ParceirosContainer>
       <header>
@@ -99,9 +121,9 @@ export function NovoParceiro() {
 
         <FormContainer>
           {step === 1 && (
-            <form>
+            <form onSubmit={handleStep1Submit}>
               <Input
-                id="Categoria"
+                id="category"
                 labelTitle="Categoria"
                 placeholder="Selecione"
                 value={partnerData.category}
@@ -111,7 +133,7 @@ export function NovoParceiro() {
               />
               <Input id="CNPJ" labelTitle="CNPJ" placeholder="Placeholder" />
               <Input
-                id="Nome"
+                id="name"
                 labelTitle="Nome"
                 placeholder="Digite o nome completo"
                 value={partnerData.name}
@@ -120,7 +142,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="E-mail"
+                id="email"
                 labelTitle="E-mail"
                 placeholder="Digite o nome completo"
                 value={partnerData.email}
@@ -129,7 +151,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Telefone"
+                id="phone"
                 labelTitle="Telefone"
                 placeholder="Digite o nome completo"
                 value={partnerData.phone}
@@ -138,7 +160,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Celular"
+                id="mobile"
                 labelTitle="Celular"
                 placeholder="Digite o nome completo"
                 value={partnerData.mobile}
@@ -147,7 +169,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Responsável Clínico"
+                id="clinicalContact"
                 labelTitle="Responsável Clínico"
                 placeholder="Digite o nome completo"
                 value={partnerData.clinicalContact}
@@ -159,8 +181,8 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Responsável Financeiro"
-                labelTitle="Responsável Clínico"
+                id="financialContact"
+                labelTitle="Responsável Financeiro"
                 placeholder="Digite o nome completo"
                 value={partnerData.financialContact}
                 onChange={(e) =>
@@ -171,7 +193,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Senha"
+                id="password"
                 labelTitle="Senha"
                 placeholder="Digite aqui"
                 type="password"
@@ -181,7 +203,7 @@ export function NovoParceiro() {
                 }
               />
               <Input
-                id="Confirme a senha"
+                id="confirmPassword"
                 labelTitle="Confirme a senha"
                 placeholder="Digite aqui"
                 type="password"
@@ -195,8 +217,10 @@ export function NovoParceiro() {
               />
               <div></div>
               <div className="button-wrapper">
-                <button className="btn-cancel">Cancelar</button>
-                <button className="btn-next" onClick={handleStep1Submit}>
+                <button className="btn-cancel" onClick={redirectToHome}>
+                  Cancelar
+                </button>
+                <button className="btn-next" type="submit">
                   Próxima
                 </button>
               </div>
@@ -209,9 +233,10 @@ export function NovoParceiro() {
                 <SearchInput placeholder="Buscar endereço" />
 
                 <Dialog.Root>
-                  <Dialog.Trigger asChild>
-                    <AddButton title="Novo endereço" variant="pure" />
-                  </Dialog.Trigger>
+                  <NewAddressButton>
+                    <PlusCircle size={20} />
+                    <p>Novo endereço</p>
+                  </NewAddressButton>
 
                   <AddressFormModal />
                 </Dialog.Root>
@@ -220,53 +245,45 @@ export function NovoParceiro() {
               <table>
                 <thead>
                   <tr>
-                    <th>Nome</th>
-                    <th>Endereço</th>
-                    <th>Telefone</th>
-                    <th>Unidade</th>
-                    <th>Colaborador</th>
-                    <th>Data de cadastro</th>
+                    <th>CEP</th>
+                    <th>Rua</th>
+                    <th>Número</th>
+                    <th>Bairro</th>
+                    <th>Complemento</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Nome</td>
-                    <td>Rua Nome da Rua, XXX - Bairro</td>
-                    <td>(XX) X XXXX-XXXX</td>
-                    <td>XXXXXX</td>
-                    <td>XXXXXX</td>
-                    <td>XXXXXX</td>
-                    <td>
-                      <div className="actions">
-                        <CircleDashed size={12} />
-                        <CircleDashed size={12} />
-                        <CircleDashed size={12} />
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>Nome</td>
-                    <td>Rua Nome da Rua, XXX - Bairro</td>
-                    <td>(XX) X XXXX-XXXX</td>
-                    <td>XXXXXX</td>
-                    <td>XXXXXX</td>
-                    <td>XXXXXX</td>
-                    <td>
-                      <div className="actions">
-                        <CircleDashed size={12} />
-                        <CircleDashed size={12} />
-                        <CircleDashed size={12} />
-                      </div>
-                    </td>
-                  </tr>
+                  {addresses.length === 0 ? (
+                    <p>Não há endereços cadastrados.</p>
+                  ) : (
+                    addresses.map((address) => (
+                      <tr key={address.id}>
+                        <td>{address.cep}</td>
+                        <td>{address.street}</td>
+                        <td>{address.number}</td>
+                        <td>{address.neighborhood}</td>
+                        <td>{address.complement}</td>
+                        <td>
+                          <div className="actions">
+                            <CircleDashed size={12} />
+                            <CircleDashed size={12} />
+                            <CircleDashed size={12} />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
 
               <div className="button-wrapper">
-                <button className="btn-cancel">Cancelar</button>
-                <button className="btn-next">Finalizar</button>
+                <button className="btn-cancel" onClick={redirectToHome}>
+                  Cancelar
+                </button>
+                <button className="btn-next" onClick={redirectToHome}>
+                  Finalizar
+                </button>
               </div>
             </>
           )}

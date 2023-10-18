@@ -1,3 +1,5 @@
+import * as Dialog from '@radix-ui/react-dialog'
+
 import styled from 'styled-components'
 
 export const ParceirosContainer = styled.div`
@@ -155,4 +157,25 @@ export const FormContainer = styled.div`
       cursor: pointer;
     }
   }
+`
+
+export const NewAddressButton = styled(Dialog.Trigger)`
+  border: 0;
+  background: ${(props) => props.theme['brand-pure']};
+  border-radius: 500px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+
+  height: 4rem;
+  padding: 0 1.6rem;
+
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: ${(props) => props.theme.white};
+  line-height: 0;
+
+  cursor: pointer;
 `
